@@ -3,6 +3,10 @@ package sajat_beolvasas;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class Beolvas_Main {
 	
 	public static void main(String[] args) {
@@ -31,16 +35,28 @@ public class Beolvas_Main {
 		
 		//-------------------------------------------
 		
+		try {
+			tomb = getUserInputFromBufferedReader(tomb.length);
+		} catch (IntegerNotPrimeException e) {
+			e.printStackTrace();
+		} finally { tomb_ki(tomb); }
+		
+		//-------------------------------------------
+		//-------------------------------------------
+		//-------------------------------------------
+		//-------------------------------------------
+		//-------------------------------------------
+		
 	}
 	
 	public static void tomb_ki(int tomb[]) {
-		System.out.println("Array: ");
+		System.out.print("Array: ");
 		
 		for(int x : tomb) {
-			System.out.println(x+" ");
+			System.out.print(x+" ");
 		}
 		
-		System.out.println("\n");
+		System.out.println();
 	}
 	
 	public static int[] getUserInput(int numberOfElements) throws InputMismatchException {
@@ -101,5 +117,44 @@ public class Beolvas_Main {
 		return true;
 	}
 	
-	
+	public static int[] getUserInputFromBufferedReader(int numberOfElements) throws IntegerNotPrimeException {
+		
+		int[] intArray = new int[numberOfElements];
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("\nInteger.valueOf(input.readLine()).intValue()\tCSAK PRIMET!");
+		
+		for (int i = 0; i < intArray.length; i++) {
+			
+			boolean wrongInput = true;
+			
+			//BufferedReader kivetel kezeles
+			try {
+				
+				//Beolvasasi hiba kivetel kezeles
+				do {
+				
+					try {
+						System.out.print("\t"+(i+1)+". tomb elem: ");
+						intArray[i] = Integer.valueOf(input.readLine()).intValue();
+					
+						if(!isPrime(intArray[i]))
+							throw new IntegerNotPrimeException();
+					
+						wrongInput = false;
+					
+					} catch (IntegerNotPrimeException e) {
+					
+						System.out.println(e.getMessage());
+					}
+				
+				} while(wrongInput);
+				
+				
+			} catch (IOException ioKivetel) {
+				ioKivetel.printStackTrace();
+			}
+		}
+		
+		return intArray;
+	}
 }
